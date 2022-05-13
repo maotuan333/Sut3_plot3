@@ -11,7 +11,8 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
         0.4660    0.6740    0.1880;...green
         0.4940    0.1840    0.5560;...purple
         0.3010    0.7450    0.9330;...aqua
-        0.6350    0.0780    0.1840...dark red
+        0.6350    0.0780    0.1840;...dark red
+        1         0         1    ...fuchsia
         ];
     SMALLFONT=6;
     
@@ -21,6 +22,7 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
    numSpont=20;
         oriStr=['spon';oriStr];
    numTrials=length(trialOnsets);
+   numFrames=size(traces,2);
    
    stimWindow=round(max(trialOffsets-trialOnsets));
    trialWindow=stimWindow+(baselineSecs+postStimSecs)*numBaselineFrames;
@@ -41,7 +43,11 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
 
            for j=1:numTrials+numSpont
                range_j = trialOnsets(j)-numBaselineFrames:trialOnsets(j)-numBaselineFrames+trialWindow-1;
+               if range_j(end)>numFrames
+                   continue; %drop the trial if it's too close to end of session 
+               else
                response=traces(i,range_j);
+               end
                trialsMat(j,:)=response';
            end
 
@@ -49,7 +55,7 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
            numOri=[numSpont; numOri];
            [~,sortIdx] = sort(oriTrace);
            % sort B using the sorting index
-           trialsMat(numSpont+1:end,:) = trialsMat(sortIdx,:);
+           trialsMat(numSpont+1:end,:) = trialsMat(numSpont+sortIdx,:);
 
 
             [filename,plotTitle,plotInfo]=gen_plot_info ...
@@ -90,7 +96,8 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
             xlabel(han,plotInfo,'FontSize', SMALLFONT);
            %xlabel(plotInfo,'FontSize', SMALLFONT);
 
-           print([dir '\' filename '_heatmap.png'],'-dpng','-r200'); 
+           print([dir '\' filename '_average_response.png'],'-dpng','-r200'); 
+           close all;
 
         end
 

@@ -8,6 +8,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
    numBaselineFrames=baselineSecs * round(freq,-1);
    numSpont=20;
    numTrials=length(trialOnsets);
+   numFrames=size(traces,2);
    
    stimWindow=round(max(trialOffsets-trialOnsets));
    trialWindow=stimWindow+(baselineSecs+postStimSecs)*numBaselineFrames;
@@ -33,7 +34,11 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
 
            for j=1:numTrials+numSpont
                range_j = trialOnsets(j)-numBaselineFrames:trialOnsets(j)-numBaselineFrames+trialWindow-1;
+               if range_j(end)>numFrames
+                   response=[traces(i,range_j(1):numFrames) zeros(1,range_j(end)-numFrames)];
+               else
                response=traces(i,range_j);
+               end
                trialsMat(j,:)=response';
            end
 
@@ -41,7 +46,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
            numOri=[numSpont; numOri];
            [~,sortIdx] = sort(oriTrace);
            % sort B using the sorting index
-           trialsMat(numSpont+1:end,:) = trialsMat(sortIdx,:);
+           trialsMat(numSpont+1:end,:) = trialsMat(numSpont+sortIdx,:);
 
 
             [filename,plotTitle,plotInfo]=gen_plot_info ...
@@ -67,7 +72,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
                xticklabels(xticks/freq);
                xline(numBaselineFrames,'--w','stimulus on','LabelVerticalAlignment','bottom');
                xline(numBaselineFrames+max(trialOffsets-trialOnsets)-0.5,'--w','stimulus off','LabelVerticalAlignment','bottom');
-               for k=1:size(oriStr,2)
+               for k=1:size(oriStr,1)
                    yline(sum(numOri(1:k-(numSpont==0))),'w',oriStr(k,:),'LabelVerticalAlignment','bottom');
                end
                yline(0,'w','spontaneous','LabelVerticalAlignment','bottom');
@@ -87,6 +92,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
            %xlabel(plotInfo,'FontSize', 12);
 
            print([dir '\' filename '_heatmap.png'],'-dpng','-r200'); 
+           close all;
 
         end
    end

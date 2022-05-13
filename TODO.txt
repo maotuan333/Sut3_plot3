@@ -1,0 +1,7 @@
+8 15 25
+put filename on folder name
+concatenate files
+put session name & num on individual plots
+why is it suddenly 2x slower?????????
+look at all neurons
+add error bar

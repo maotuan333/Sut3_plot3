@@ -14,7 +14,8 @@ function [] = traces_vis ...
         0.4660    0.6740    0.1880;...green
         0.4940    0.1840    0.5560;...purple
         0.3010    0.7450    0.9330;...aqua
-        0.6350    0.0780    0.1840...dark red
+        0.6350    0.0780    0.1840;...dark red
+        1         0         1    ...fuchsia
         ];
     
     minLim=min(lim);
@@ -46,7 +47,8 @@ function [] = traces_vis ...
         xlabel(plotInfo,'FontSize', 8);
         print([dir '\' filename '_sample trace.png'],'-dpng','-r300'); 
     %end
-        clear;
+    
+        close all;
 end
 
 %done with highlighting stimulus orientation but probably - need a color
