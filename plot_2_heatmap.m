@@ -1,4 +1,5 @@
-function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,visDrivenIDX,oriTrace,oriStr,lim,statsp)
+function [] =   plot_2_heatmap(dir,traces,freq,trial, ...
+        trialOnsets,trialOffsets,visDrivenIDX,oriTrace,oriStr,)
 
    fixedTitle = 'visually driven by t-test';
    fixedInfo = [newline 'active=p<0.05   ' ];    
@@ -45,7 +46,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
 
 
             [filename,plotTitle,plotInfo]=gen_plot_info ...
-                        (i,[fixedInfo datestr(now)],fixedTitle,oriStr,visDrivenIDX(i,:),statsp(i,:));
+                        (runName,runFilename,i,[fixedInfo datestr(now)],fixedTitle,oriStr,visDrivenIDX(i,:),statsp(i,:));
 
 
            fig=figure('visible','off');%tiledlayout(1,2);
@@ -67,7 +68,7 @@ function [] =   plot_2_heatmap(dir,traces,freq,trial,trialOnsets,trialOffsets,vi
                xticklabels(xticks/freq);
                xline(numBaselineFrames,'--w','stimulus on','LabelVerticalAlignment','bottom');
                xline(numBaselineFrames+max(trialOffsets-trialOnsets)-0.5,'--w','stimulus off','LabelVerticalAlignment','bottom');
-               for k=1:size(oriStr,2)
+               for k=1:size(oriStr,1)
                    yline(sum(numOri(1:k-(numSpont==0))),'w',oriStr(k,:),'LabelVerticalAlignment','bottom');
                end
                yline(0,'w','spontaneous','LabelVerticalAlignment','bottom');

@@ -1,4 +1,6 @@
-function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOffsets,visDrivenIDX,oriTrace,oriStr,lim,statsp)
+function [] = plot_3_average_response(dir,traces,freq,trial, ...
+        trialOnsets,trialOffsets,visDrivenIDX,oriTrace,oriStr,lim,statsp, ...
+        runName,runFilename)
 
    fixedTitle = 'visually driven by t-test';
    fixedInfo = [newline 'active=p<0.05   ' ];   
@@ -11,7 +13,8 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
         0.4660    0.6740    0.1880;...green
         0.4940    0.1840    0.5560;...purple
         0.3010    0.7450    0.9330;...aqua
-        0.6350    0.0780    0.1840...dark red
+        0.6350    0.0780    0.1840;...dark red
+        1         0         1    ...fuchsia
         ];
     SMALLFONT=6;
     
@@ -53,7 +56,7 @@ function [] = plot_3_average_response(dir,traces,freq,trial,trialOnsets,trialOff
 
 
             [filename,plotTitle,plotInfo]=gen_plot_info ...
-                        (i,[fixedInfo datestr(now)],fixedTitle,oriStr(2:end,:),visDrivenIDX(i,:),statsp(i,:));
+                        (runName,runFilename,i,[fixedInfo datestr(now)],fixedTitle,oriStr(2:end,:),visDrivenIDX(i,:),statsp(i,:));
 
 
            fig=figure('visible','off');%tiledlayout(1,2);

@@ -17,7 +17,7 @@ function [oriStr,visDrivenIDX,statsp,traces,visstimTrace,trial,numTrials,lim] = 
     traces=suite2pData.dFF; %(visDrivenNeurons,:);
 
     %generating stimuli timeseries for each orientation
-    visstimTrace=repelem(false,length(suite2pData.nidaqAligned.visstim_on), ...
+    visstimTrace=repelem(false,size(suite2pData.dFF,2), ... 25-visstim, others-visstim_on
                     length(oris));
     for jj=1:length(oris)
         oriIndex=find(oriTrace==oris(jj));
@@ -40,3 +40,4 @@ function [oriStr,visDrivenIDX,statsp,traces,visstimTrace,trial,numTrials,lim] = 
     
     end
 end
+
