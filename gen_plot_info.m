@@ -1,22 +1,18 @@
+function [filename,plotTitle,plotInfo] = gen_plot_info(plotPack,i,visDrivenIDX_i,statsp_i)
 
-
-
-
-
-
-
-
-function [filename,plotTitle,plotInfo] = gen_plot_info(runName,runFilename,index,fixedInfo,fixedTitle,oriStr,visDrivenIDX,statsp)
-
-            filename=[runName '#' num2str(index)];
-            plotTitle= [filename ' - ' fixedTitle];
+            runInfo = [plotPack.runNo '_' plotPack.runName '_' plotPack.runFilename];
+            filename=[runInfo ' #' num2str(i)];
+            plotTitle= [filename plotPack.fixedTitle];
             plotInfo=[];
-            for i=1:size(oriStr,2)
-                if visDrivenIDX(i)==1
-                    filename=[filename '_' oriStr(i,:)];
+            for j=1:length(plotPack.oriStr)
+                if visDrivenIDX_i(j)==1
+                    filename=[filename '_' plotPack.oriStr{j}];
                 end
-                plotInfo=[plotInfo '(' oriStr(i,:) ')p=' num2str(statsp(i),'%.2g') '. '];
+                if mod(j,5)==0
+                    plotInfo=[plotInfo newline];
+                end
+                plotInfo=[plotInfo '(' plotPack.oriStr{j} ')p=' num2str(statsp_i(j),'%.2g') '. '];
             end
-        plotInfo=[plotInfo fixedInfo newline runFilename];
-        
+        plotInfo=[plotInfo plotPack.fixedInfo];
+
 end

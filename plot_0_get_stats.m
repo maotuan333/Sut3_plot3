@@ -1,17 +1,16 @@
-function [oriStr,visDrivenIDX,statsp,traces,visstimTrace,trial,numTrials,lim] = ...
+function [traces,visstimTrace,visDrivenIDX,statsp,oriStr,lim] = ...
         plot_0_get_stats (suite2pData)
-
+   
+   
     % oris, oriStr
     % visDrivenIDX, visDrivenNeurons
     % statsp
     % traces
     oriTrace=suite2pData.Stim.oriTrace;
     oris = unique(oriTrace);%orientations
-    oriStr = num2str(oris);
-        oriStr = strcat(oriStr,'°');
+    oriStr = arrayfun(@(x) [num2str(x) '°'], oris, 'UniformOutput', false);
+
     visDrivenIDX=suite2pData.bias.visDrivenIDX;
-    visDrivenNeurons=find(any(visDrivenIDX,2)); %TODO should i keep this
-    numTrials=length(visDrivenNeurons);
     %statsh=cell2mat(struct2cell(suite2pData.statsT.h)); %equivalent to visDrivenIDX
     statsp=cell2mat(struct2cell(suite2pData.statsT.p))';    
     traces=suite2pData.dFF; %(visDrivenNeurons,:);
@@ -19,22 +18,15 @@ function [oriStr,visDrivenIDX,statsp,traces,visstimTrace,trial,numTrials,lim] = 
     %generating stimuli timeseries for each orientation
     visstimTrace=repelem(false,size(suite2pData.dFF,2), ... 25-visstim, others-visstim_on
                     length(oris));
-    for jj=1:length(oris)
-        oriIndex=find(oriTrace==oris(jj));
-        for kk=1:length(oriIndex)
-            stimOn=suite2pData.Stim.visstimOnsets(oriIndex(kk));
-            stimOff=suite2pData.Stim.visstimOffsets(oriIndex(kk));
-            visstimTrace(stimOn:stimOff,jj)=true;
+    for j=1:length(oris)
+        oriIndex=find(oriTrace==oris(j));
+        for k=1:length(oriIndex)
+            stimOn=suite2pData.Stim.visstimOnsets(oriIndex(k));
+            stimOff=suite2pData.Stim.visstimOffsets(oriIndex(k));
+            visstimTrace(stimOn:stimOff,j)=true;
         end
-        
-    trial.trialOn=0;
-    firstStimSession=2;
-    trial.stimOn=suite2pData.Stim.trialonsets(1)-suite2pData.startIdx(firstStimSession);
-    trial.stimOff=suite2pData.Stim.trialoffsets(1)-suite2pData.startIdx(firstStimSession);
-    trial.trialOff=suite2pData.Stim.trialonsets(2)-suite2pData.startIdx(firstStimSession)-1;
-    
-    numTrials=length(suite2pData.Stim.visstimOnsets);
-    
+
+    %numTrials=length(suite2pData.Stim.visstimOnsets);
     
     lim = [min(traces(:)) max(traces(:))];
     
