@@ -19,9 +19,10 @@ function [trialsMat,plotPack] = trial_heatmap_prep ...
             %length of the window we're examining, rounded to 10
    trialLen=max(stimOnsets(2:end/2)-stimOnsets(1:end/2-1)); 
             %gap between two onsets within a session
+            %%%gosh this is not right
 
    if windowLen>trialLen
-        warning(['Windows overlapping by ' num2str(windowLen-trialLen-1) ' frames']);
+        warning(['Trial windows overlapping by ' num2str(windowLen-trialLen-1) ' frames']);
    end
    
    %% generate start of each window
@@ -36,8 +37,8 @@ function [trialsMat,plotPack] = trial_heatmap_prep ...
        bleedLen=windowOnsets(end)+windowLen-1-num.framesTrace;
        warning(['Last window exceeds maximum frame number (' num2str(bleedLen) ' frames). ' ...
                 'Filling with zeros.']);
-       bleed=windowOnsets(end)+windowLen-1-numFramesTrace;
-       traces=[traces zeros(numNeurons,bleed)];
+       bleed=windowOnsets(end)+windowLen-1-num.framesTrace;
+       traces=[traces zeros(num.neurons,bleed)];
    end
    
    %% getting plot peripheries
@@ -96,9 +97,9 @@ function [trialsMat,plotPack] = trial_heatmap_prep ...
    for i=1:numTrials
         for j=1:num.neurons
             % sort trials using the sorting index
-            windowOffset=windowOnsets(i)+windowLen-1;
+            windowOffset=windowOnsets(sortIdx(i))+windowLen-1;
             %insert trial into sorted position
-            trialsMat(sortIdx(i),:,j)=traces(j,windowOnsets(i):windowOffset);
+            trialsMat(i,:,j)=traces(j,windowOnsets(sortIdx(i)):windowOffset);
         end
    end
       
